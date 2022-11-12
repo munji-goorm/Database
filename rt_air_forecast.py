@@ -18,14 +18,12 @@ frcst2 = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustWeekFrc
 # 한 번만 실행하지말고 계속하게 해야된다.
 try:
     response = requests.get(frcst)
+    response2 = requests.get(frcst2)
 except requests.exceptions.ConnectTimeout:
     response = requests.get(frcst)
+    response2 = requests.get(frcst2)
 except ConnectionRefusedError:
     print("서버에 연결할 수 없습니다.")
-try:
-    response2 = requests.get(frcst2)
-except requests.exceptions.ConnectTimeout:
-    response2 = requests.get(frcst2)
 
 contents = response.text
 contents2 = response2.text

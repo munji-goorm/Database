@@ -7,8 +7,13 @@ import pymysql
 
 url = 'http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList?serviceKey=9EVeUgs2qfDAndxMrmsipei8IlVyfYJLrYhjRHc1P3O1vpnEcS%2BX7CJByyCd81%2FdfwKZ1efWvF1WSaDwYG6ApA%3D%3D&returnType=json&numOfRows=1000&pageNo=1'
 
-response = requests.get(url)
 
+try:
+    response = requests.get(url)
+except requests.exceptions.ConnectTimeout:
+    response = requests.get(url)
+except ConnectionRefusedError:
+    print("서버에 연결할 수 없습니다.")
 contents = response.text
 
 
@@ -46,7 +51,7 @@ if (len(body) != 0):
             if a['dmY'] is not None:
                 dm_y = a['dmY']
 
-            sql = "INSERT INTO air_station_info(station_name, addr, dm_x, dm_y) VALUES (%s,%s,%s,%s)"
+            sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
             val = (str(station_name), str(addr), float(dm_x), float(dm_y))
 
             curs.execute(sql, val)
