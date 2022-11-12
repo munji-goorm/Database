@@ -35,6 +35,8 @@ if (len(body) != 0):
         )
         # Cursor Object 가져오기
         curs = conn.cursor()
+        sql3 = "TRUNCATE rt_air_info"
+        curs.execute(sql3)
         for a in body:
             mangName = a['mangName']
             stationName = a['stationName']
