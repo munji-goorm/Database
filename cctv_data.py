@@ -4600,7 +4600,5 @@ def insertsql_from_json():
         curs.execute(sql, val)
         conn.commit()
 
-    print(curs.rowcount, "record inserted")
-
-    insertsql_from_json()
-# 0 들어가 있는 값 빼기
+    print("record inserted")
+insertsql_from_json()

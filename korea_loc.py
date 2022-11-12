@@ -44,5 +44,7 @@ def insertsql_from_json():
 
     f.close()
 
+    print("record inserted")
+
 
 insertsql_from_json()

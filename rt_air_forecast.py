@@ -42,7 +42,7 @@ if (len(body) != 0):
     def frcstdict(val1, val2):
         for f in val1.split(', '):
             x, y = f.split(' : ')
-            if x == '신뢰도' or x == '강원영서' or x == '경기남부':
+            if x == '강원영서' or x == '경기남부':
                 continue
             elif x == '강원영동':
                 x = '강원'
@@ -57,7 +57,7 @@ if (len(body) != 0):
     def frcst2dict(val3, val4):
         for f in val3.split(', '):
             x, y = f.split(' : ')
-            if x == '신뢰도' or x == '강원영서' or x == '경기남부':
+            if x == '강원영서' or x == '경기남부':
                 continue
             elif x == '강원영동':
                 x = '강원'
@@ -95,7 +95,6 @@ if (len(body) != 0):
         curs = conn.cursor()
         sql3 = "TRUNCATE rt_air_forecast"
         curs.execute(sql3)
-
         for b in frcstArr2:
 
             sql2 = "INSERT INTO rt_air_forecast(date_time,city,status) VALUES (%s,%s,%s)"
@@ -112,5 +111,5 @@ if (len(body) != 0):
 
             curs.execute(sql, val)
             conn.commit()
-
+        print("record inserted")
     insertsql_from_json()

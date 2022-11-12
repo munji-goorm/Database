@@ -58,5 +58,5 @@ if (len(body) != 0):
 
             curs.execute(sql, val)
             conn.commit()
-
+        print("record inserted")
     insertsql_from_json()
