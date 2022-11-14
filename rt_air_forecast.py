@@ -99,7 +99,7 @@ if (len(body1) != 0) and (len(body2) != 0):
     for frcst in frcstArr:
         sql_insert = "INSERT INTO rt_air_forecast(date_time,city,status) VALUES (%s,%s,%s)"
         val = (frcst['date'], frcst['city'], frcst['status'])
-        curs.excute(sql_insert, val)
+        curs.execute(sql_insert, val)
     
     conn.commit()
     print("record inserted")
