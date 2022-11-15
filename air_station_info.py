@@ -46,14 +46,11 @@ if (len(body) != 0):
 
     for a in body:
         if a['stationName'] and a['addr'] and a['dmX'] and a['dmY']:
-            sql_row = "({},{},{},{})".format(a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
-            sql_rows.append(sql_row)
+            sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES " + "({},{},{},{})".format(a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
+            curs.execute(sql)
         else:            
             continue
-
-    for i in range(7):
-        sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES " + ",".join(sql_rows[i*100:(i+1)*100])
-        curs.execute(sql)
+        
     curs.close()    
     conn.commit()
     conn.close()
