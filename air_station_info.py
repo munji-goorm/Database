@@ -3,16 +3,29 @@ import requests
 import json
 import pymysql
 import os
+import sys
 
 # url 입력
 url = 'http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList?serviceKey=9EVeUgs2qfDAndxMrmsipei8IlVyfYJLrYhjRHc1P3O1vpnEcS%2BX7CJByyCd81%2FdfwKZ1efWvF1WSaDwYG6ApA%3D%3D&returnType=json&numOfRows=1000&pageNo=1'
 
-try:
-    response = requests.get(url)
-except requests.exceptions.ConnectTimeout:
-    response = requests.get(url)
-except ConnectionRefusedError:
-    print("서버에 연결할 수 없습니다.")
+# API를 통해 데이터를 긁어오기
+# 5회 에러 발생 시 파일 종료
+count = 0
+while 1:
+    try:
+        response = requests.get(url)
+        break
+    except requests.exceptions.Timeout:
+        print("Timeout Error.. Retry")
+        count += 1
+    except ConnectionRefusedError:
+        print("Cannot connect to server.. Retry")
+        count += 1
+    finally:
+        if (count >= 5):
+            print("Try 5 times, but it doesn't work. Stop program")
+            sys.exit()
+
 contents = response.text
 
 # 환경변수 불러오기
@@ -30,16 +43,15 @@ body = json_ob['response']['body']['items']
 
 if (len(body) != 0):
     # connection 정보. 접속
-    # 비밀번호가 포함되어 있기 때문에 보통 config파일에서 key값으로 부른다.
     conn = pymysql.connect(
         host=host,
-        port=int(port),
+        port=port,
         user=user,  # ex) root
         password=password,
         database=database,
         charset='utf8'
     )
-    
+
     curs = conn.cursor()
 
     for a in body:

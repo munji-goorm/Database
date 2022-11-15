@@ -2,6 +2,7 @@ import requests
 import json
 import pymysql
 import sys
+import os
 from datetime import datetime, timedelta
 
 # 문자열 처리
@@ -63,6 +64,13 @@ while 1:
             print("Try 5 times, but it doesn't work. Stop program")
             sys.exit()
 
+# 환경변수 불러오기
+host=os.environ.get('DB_HOST')  # ex) '127.0.0.1'
+port=int(os.environ.get('DB_PORT')) # ex) 3306
+user=os.environ.get('DB_USER') # ex) 'root'
+password=os.environ.get('DB_PW') # ex) '1234'
+database=os.environ.get('DB_NAME') # ex) 'ApiExplorer'
+
 contents1 = response1.text
 contents2 = response2.text
 
@@ -85,21 +93,27 @@ if (len(body1) != 0) and (len(body2) != 0):
 
     # connection 정보 및 접속
     conn = pymysql.connect(
-        host="localhost",  # ex) '127.0.0.1'
-        port=3306,
-        user="root",  # ex) root
-        password="jm19980630!",
-        database="ApiExplorer",
+        host=host,
+        port=port,
+        user=user,  # ex) root
+        password=password,
+        database=database,
         charset='utf8'
     )
     # Cursor Object 가져오기
     curs = conn.cursor()
-    sql_trunc = "TRUNCATE rt_air_forecast"
-    curs.execute(sql_trunc)
+    curs.execute("TRUNCATE rt_air_forecast")
+
     for frcst in frcstArr:
-        sql_insert = "INSERT INTO rt_air_forecast(date_time,city,status) VALUES (%s,%s,%s)"
+        sql_insert = "INSERT INTO rt_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
         val = (frcst['date'], frcst['city'], frcst['status'])
         curs.execute(sql_insert, val)
-    
+
+    curs.close()    
     conn.commit()
+    conn.close()
     print("record inserted")
+#
+# 만약 파일을 받아오지 못하면 어떻게 할지 고민..
+# else:
+#     os.execl(sys.executable, sys.executable, *sys.argv)

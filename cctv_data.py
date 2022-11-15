@@ -1,10 +1,5 @@
-# 서울 CCTV 정보가 담긴 배열 - 304개
-# XCOORD: 경도
-# YCOORD: 위도
-# CCTVNAME: cctv 이름
-# URL: cctv 영상 url
-
 import pymysql
+import os
 a = [
     {
         "CCTVIP": "null",
@@ -4568,37 +4563,38 @@ a = [
     }
 ]
 
+# cctv url 생성
 for aa in a:
     aa["URL"] = 'http://www.utic.go.kr/view/map/cctvStream.jsp?cctvid=' + aa["CCTVID"] + '&cctvName=' + aa["CCTVNAME"] + '&kind=Seoul' + \
         '&cctvip=' + aa["CCTVIP"] + '&cctvch=' + str(
             aa["CH"]) + '&id=' + aa["ID"] + '&cctvpasswd=' + aa["PASSWD"] + '&cctvport=' + aa["PORT"]
 
+# 환경변수 불러오기
+host=os.environ.get('DB_HOST')  # ex) '127.0.0.1'
+port=int(os.environ.get('DB_PORT')) # ex) 3306
+user=os.environ.get('DB_USER') # ex) 'root'
+password=os.environ.get('DB_PW') # ex) '1234'
+database=os.environ.get('DB_NAME') # ex) 'ApiExplorer'
 
-# 라이브러리 import
+# connection 정보. 접속
+conn = pymysql.connect(
+    host=host,
+    port=port,
+    user=user,  # ex) root
+    password=password,
+    database=database,
+    charset='utf8'
+)
 
+# Cursor Object 가져오기
+curs = conn.cursor()
 
-def insertsql_from_json():
-    # connection 정보
+for b in a:
+    sql = "INSERT INTO cctv_data(url, cctv_name, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
+    val = (b['URL'], b['CCTVNAME'], float(b['YCOORD']), float(b['XCOORD']))
+    curs.execute(sql, val)
 
-    # 접속
-    # 비밀번호가 포함되어 있기 때문에 보통 config파일에서 key값으로 부른다.
-    conn = pymysql.connect(
-        host="localhost",  # ex) '127.0.0.1'
-        port=3306,
-        user="root",  # ex) root
-        password="jm19980630!",
-        database="ApiExplorer",
-        charset='utf8'
-    )
-    # Cursor Object 가져오기
-    curs = conn.cursor()
-    for b in a:
-
-        sql = "INSERT INTO cctv_data(url, cctv_name, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
-        val = (str(b['URL']), str(b['CCTVNAME']),
-               float(b['YCOORD']), float(b['XCOORD']))
-        curs.execute(sql, val)
-        conn.commit()
-
-    print("record inserted")
-insertsql_from_json()
+curs.close()
+conn.commit()
+conn.close()
+print("record inserted")
