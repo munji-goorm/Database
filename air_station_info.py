@@ -34,7 +34,7 @@ if (len(body) != 0):
     # 비밀번호가 포함되어 있기 때문에 보통 config파일에서 key값으로 부른다.
     conn = pymysql.connect(
         host=host,
-        port=port,
+        port=int(port),
         user=user,  # ex) root
         password=password,
         database=database,
@@ -45,14 +45,15 @@ if (len(body) != 0):
     sql_rows = []
 
     for a in body:
-        if (a['stationName'] is None) or (a['addr'] is None) or (a['dmX'] is None) or (a['dmY'] is None):
-            continue
-        else:
-            sql_row = '({},{},{},{})'.format(a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
+        if a['stationName'] and a['addr'] and a['dmX'] and a['dmY']:
+            sql_row = "({},{},{},{})".format(a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
             sql_rows.append(sql_row)
+        else:            
+            continue
 
-    sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES " + ",".join(sql_rows)
-    curs.execute(sql)
+    for i in range(7):
+        sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES " + ",".join(sql_rows[i*100:(i+1)*100])
+        curs.execute(sql)
     curs.close()    
     conn.commit()
     conn.close()
