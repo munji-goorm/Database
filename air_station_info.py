@@ -53,8 +53,10 @@ if (len(body) != 0):
     )
 
     curs = conn.cursor()
+    sql = "CREATE TABLE IF NOT EXISTS air_station_info(station_name varchar(15) NOT NULL PRIMARY KEY, addr varchar(100) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL)"
+    curs.execute(sql)
 
-    for a in body:
+    for a in body:    
         if a['stationName'] and a['addr'] and a['dmX'] and a['dmY']:
             sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
             val = (a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))

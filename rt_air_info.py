@@ -53,6 +53,8 @@ if (len(body) != 0):
 
     # Cursor Object 가져오기
     curs = conn.cursor()
+    sql = "CREATE TABLE rt_air_info(so2_value Float, pm10_value int, pm25_value int, mang_name varchar(15), station_name varchar(15) PRIMARY KEY, no2_value Float, khai_value int, co_value Float, sido_name varchar(15), data_time varchar(30), o3_value Float)"
+    curs.execute(sql)
     curs.execute("TRUNCATE rt_air_info")
 
     for a in body:

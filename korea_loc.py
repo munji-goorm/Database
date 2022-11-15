@@ -25,6 +25,8 @@ conn = pymysql.connect(
 
 # Cursor Object 가져오기
 curs = conn.cursor()
+sql = "CREATE TABLE IF NOT EXISTS korea_loc(full_addr varchar(30) NOT NULL PRIMARY KEY, short_addr varchar(30) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL)"
+curs.execute(sql)
 
 for a in rdr:
     if a[1] == '0':
