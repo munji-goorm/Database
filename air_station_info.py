@@ -21,7 +21,6 @@ port=int(os.environ.get('DB_PORT')) # ex) 3306
 user=os.environ.get('DB_USER') # ex) 'root'
 password=os.environ.get('DB_PW') # ex) '1234'
 database=os.environ.get('DB_NAME') # ex) 'ApiExplorer'
-charset='utf8'
 
 # 문자열을 json으로 변경
 json_ob = json.loads(contents)
@@ -42,16 +41,15 @@ if (len(body) != 0):
     )
     
     curs = conn.cursor()
-    sql_rows = []
 
     for a in body:
         if a['stationName'] and a['addr'] and a['dmX'] and a['dmY']:
-            sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES " + "({},{},{},{})".format(a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
-            curs.execute(sql)
+            sql = "INSERT INTO air_station_info(station_name, addr, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
+            val = (a['stationName'], a['addr'], float(a['dmX']), float(a['dmY']))
+            curs.execute(sql,val)
         else:            
             continue
-        
-    curs.close()    
+    curs.close()
     conn.commit()
     conn.close()
     print("record inserted")
