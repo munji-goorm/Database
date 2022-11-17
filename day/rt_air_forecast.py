@@ -102,7 +102,7 @@ if (len(body1) != 0) and (len(body2) != 0):
     )
     # Cursor Object 가져오기
     curs = conn.cursor()
-    sql = "CREATE TABLE rt_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
+    sql = "CREATE TABLE IF NOT EXIST rt_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
     curs.execute(sql)
     curs.execute("TRUNCATE rt_air_forecast")
 
