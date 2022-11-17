@@ -4589,8 +4589,11 @@ conn = pymysql.connect(
 # Cursor Object 가져오기
 curs = conn.cursor()
 
+# Table 초기화
 sql = "CREATE TABLE IF NOT EXISTS cctv_data(url varchar(300) NOT NULL PRIMARY KEY, cctv_name varchar(30) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL)"
 curs.execute(sql)
+curs.execute("TRUNCATE cctv_data")
+
 for b in a:
     sql = "INSERT INTO cctv_data(url, cctv_name, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
     val = (b['URL'], b['CCTVNAME'], float(b['YCOORD']), float(b['XCOORD']))

@@ -51,10 +51,14 @@ if (len(body) != 0):
         database=database,
         charset='utf8'
     )
-
+    
+    # Cursor Object 가져오기
     curs = conn.cursor()
+    
+    # Table 초기화
     sql = "CREATE TABLE IF NOT EXISTS air_station_info(station_name varchar(15) NOT NULL PRIMARY KEY, addr varchar(100) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL)"
     curs.execute(sql)
+    curs.execute("TRUNCATE air_station_info")
 
     for a in body:    
         if a['stationName'] and a['addr'] and a['dmX'] and a['dmY']:
