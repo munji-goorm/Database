@@ -116,6 +116,5 @@ if (len(body1) != 0) and (len(body2) != 0):
     conn.close()
     print("record inserted")
 #
-# 만약 파일을 받아오지 못하면 어떻게 할지 고민..
 # else:
 #     os.execl(sys.executable, sys.executable, *sys.argv)
