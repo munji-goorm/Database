@@ -29,6 +29,8 @@ jobs:
     - name: change directory '/day'
       run: |
           cd ./day
+          pwd
+          ls -al
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
