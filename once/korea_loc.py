@@ -35,14 +35,14 @@ for a in rdr:
     if a[1] == '0':
         continue
     elif a[1] == '':
-        fulladdr = (a[0] + ' ' + a[2])
-        shortaddr = a[2]
+        full_addr = (a[0] + ' ' + a[2])
+        short_addr = a[2]
     else:
-        fulladdr = (a[0] + ' ' + a[1] + ' ' + a[2])
-        shortaddr = (a[1] + ' ' + a[2])
+        full_addr = (a[0] + ' ' + a[1] + ' ' + a[2])
+        short_addr = (a[1] + ' ' + a[2])
 
     sql = "INSERT INTO korea_loc(full_addr, short_addr, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
-    val = (fulladdr, shortaddr, float(a[3]), float(a[4]))
+    val = (full_addr, short_addr, float(a[3]), float(a[4]))
 
     curs.execute(sql, val)
 

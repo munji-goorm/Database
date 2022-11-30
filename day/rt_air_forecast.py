@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 # data: 예보 ("서울 : 낮음, 인천 : 낮음, ..., 제주 : 낮음, 신뢰도 : 보통")
 # date: 날짜 ("2022-11-17")
 # 결과: 배열에 {'city': '서울', 'status': '낮음', 'date': '2022-11-17'}, ... 같은 형태로 값 저장해서 반환
-def frcstdict(data, date):
+def cnv_frc_to_dict(data, date):
     arr = []
     data, trust = data.split(', 신뢰도 : ')
     for i in data.split(', '):
@@ -83,13 +83,13 @@ body1 = json_ob1['response']['body']['items']
 body2 = json_ob2['response']['body']['items']
 
 if (len(body1) != 0) and (len(body2) != 0):
-    frcstArr = []
-    frcstArr += frcstdict(body2[0]['frcstOneCn'], body2[0]['frcstOneDt'])
-    frcstArr += frcstdict(body2[0]['frcstTwoCn'], body2[0]['frcstTwoDt'])
-    frcstArr += frcstdict(body1[0]['frcstOneCn'], body1[0]['frcstOneDt'])
-    frcstArr += frcstdict(body1[0]['frcstTwoCn'], body1[0]['frcstTwoDt'])
-    frcstArr += frcstdict(body1[0]['frcstThreeCn'], body1[0]['frcstThreeDt'])
-    frcstArr += frcstdict(body1[0]['frcstFourCn'], body1[0]['frcstFourDt'])
+    frcst_arr = []
+    frcst_arr += cnv_frc_to_dict(body2[0]['frcstOneCn'], body2[0]['frcstOneDt'])
+    frcst_arr += cnv_frc_to_dict(body2[0]['frcstTwoCn'], body2[0]['frcstTwoDt'])
+    frcst_arr += cnv_frc_to_dict(body1[0]['frcstOneCn'], body1[0]['frcstOneDt'])
+    frcst_arr += cnv_frc_to_dict(body1[0]['frcstTwoCn'], body1[0]['frcstTwoDt'])
+    frcst_arr += cnv_frc_to_dict(body1[0]['frcstThreeCn'], body1[0]['frcstThreeDt'])
+    frcst_arr += cnv_frc_to_dict(body1[0]['frcstFourCn'], body1[0]['frcstFourDt'])
 
     # connection 정보 및 접속
     conn = pymysql.connect(
@@ -106,7 +106,7 @@ if (len(body1) != 0) and (len(body2) != 0):
     curs.execute(sql)
     curs.execute("TRUNCATE rt_air_forecast")
 
-    for frcst in frcstArr:
+    for frcst in frcst_arr:
         sql_insert = "INSERT INTO rt_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
         val = (frcst['date'], frcst['city'], frcst['status'])
         curs.execute(sql_insert, val)
