@@ -104,12 +104,12 @@ if (len(body1) != 0) and (len(body2) != 0):
     )
     # Cursor Object 가져오기
     curs = conn.cursor()
-    sql = "CREATE TABLE IF NOT EXISTS daily_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
+    sql = "CREATE TABLE IF NOT EXISTS rt_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
     curs.execute(sql)
-    curs.execute("TRUNCATE daily_air_forecast")
+    curs.execute("TRUNCATE rt_air_forecast")
 
     for frcst in frcst_arr:
-        sql_insert = "INSERT INTO daily_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
+        sql_insert = "INSERT INTO rt_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
         val = (frcst['date'], frcst['city'], frcst['status'])
         curs.execute(sql_insert, val)
 
