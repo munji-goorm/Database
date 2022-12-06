@@ -18,7 +18,7 @@ def cnv_frc_to_dict(data, date):
     for i in data.split(', '):
         dict = {}
         city, status = i.split(' : ')
-        if cnt == 3 or cnt == 4
+        if (cnt == 3) or (cnt == 4):
             continue
 
         if trust == '높음':
