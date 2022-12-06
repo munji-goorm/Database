@@ -27,22 +27,13 @@ conn = pymysql.connect(
 curs = conn.cursor()
 
 # Table 초기화
-sql = "CREATE TABLE IF NOT EXISTS korea_loc(full_addr varchar(30) NOT NULL PRIMARY KEY, short_addr varchar(30) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL)"
+sql = "CREATE TABLE IF NOT EXISTS korea_loc(full_addr varchar(30) NOT NULL PRIMARY KEY, short_addr varchar(30) NOT NULL, x_coord double NOT NULL, y_coord double NOT NULL, station_name varchar(30) NOT NULL)"
 curs.execute(sql)
 curs.execute("TRUNCATE korea_loc")
 
 for a in rdr:
-    if a[1] == '0':
-        continue
-    elif a[1] == '':
-        full_addr = (a[0] + ' ' + a[2])
-        short_addr = a[2]
-    else:
-        full_addr = (a[0] + ' ' + a[1] + ' ' + a[2])
-        short_addr = (a[1] + ' ' + a[2])
-
-    sql = "INSERT INTO korea_loc(full_addr, short_addr, x_coord, y_coord) VALUES (%s,%s,%s,%s)"
-    val = (full_addr, short_addr, float(a[3]), float(a[4]))
+    sql = "INSERT INTO korea_loc(full_addr, short_addr, x_coord, y_coord, station_name) VALUES (%s,%s,%s,%s,%s)"
+    val = (a[0], a[1], float(a[2]), float(a[3]), a[4])
 
     curs.execute(sql, val)
 
