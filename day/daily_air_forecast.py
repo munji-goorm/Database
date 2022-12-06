@@ -12,12 +12,14 @@ from datetime import datetime, timedelta
 def cnv_frc_to_dict(data, date):
     arr = []
     data, trust = data.split(', 신뢰도 : ')
+    cnt = 0
+    cities = ['서울특별시', '인천광역시', '경기도', '경기도', '강원도', '강원도', '대전광역시', '세종특별자치시', '충청남도', '충청북도',
+            '광주광역시', '전라북도', '전라남도', '부산광역시', '대구광역시', '울산광역시', '경상북도', '경상남도', '제주특별자치도']
     for i in data.split(', '):
+        dict = {}
         city, status = i.split(' : ')
-        if city in {'강원영서', '경기남부'}:
+        if cnt == 3 or cnt == 4
             continue
-        elif len(city) == 4:
-            city = city[:2]
 
         if trust == '높음':
             if status == '높음':
@@ -29,11 +31,11 @@ def cnv_frc_to_dict(data, date):
                 status = '나쁨'
             else:
                 status = '보통'
-        dict = {}
-        dict['city'] = city
+        dict['city'] = cities[cnt]
         dict['status'] = status
         dict['date'] = date
         arr.append(dict)
+        cnt += 1
     return arr
     
 yesterday = datetime.now() - timedelta(1)  # 어제 날짜
@@ -102,12 +104,12 @@ if (len(body1) != 0) and (len(body2) != 0):
     )
     # Cursor Object 가져오기
     curs = conn.cursor()
-    sql = "CREATE TABLE IF NOT EXISTS rt_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
+    sql = "CREATE TABLE IF NOT EXISTS daily_air_forecast(id int AUTO_INCREMENT PRIMARY KEY, date_time varchar(30), city varchar(10), status varchar(10))"
     curs.execute(sql)
-    curs.execute("TRUNCATE rt_air_forecast")
+    curs.execute("TRUNCATE daily_air_forecast")
 
     for frcst in frcst_arr:
-        sql_insert = "INSERT INTO rt_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
+        sql_insert = "INSERT INTO daily_air_forecast(date_time, city, status) VALUES (%s,%s,%s)"
         val = (frcst['date'], frcst['city'], frcst['status'])
         curs.execute(sql_insert, val)
 
