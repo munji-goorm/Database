@@ -12,11 +12,12 @@ from datetime import datetime, timedelta
 def cnv_frc_to_dict(data, date):
     arr = []
     data, trust = data.split(', 신뢰도 : ')
-    cnt = 0
+    cnt = -1
     cities = ['서울특별시', '인천광역시', '경기도', '경기도', '강원도', '강원도', '대전광역시', '세종특별자치시', '충청남도', '충청북도',
             '광주광역시', '전라북도', '전라남도', '부산광역시', '대구광역시', '울산광역시', '경상북도', '경상남도', '제주특별자치도']
     for i in data.split(', '):
         dict = {}
+        cnt += 1
         city, status = i.split(' : ')
         if (cnt == 3) or (cnt == 4):
             continue
@@ -35,7 +36,6 @@ def cnv_frc_to_dict(data, date):
         dict['status'] = status
         dict['date'] = date
         arr.append(dict)
-        cnt += 1
     return arr
     
 yesterday = datetime.now() - timedelta(1)  # 어제 날짜
