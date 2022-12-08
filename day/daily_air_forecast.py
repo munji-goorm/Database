@@ -37,15 +37,21 @@ def cnv_frc_to_dict(data, date):
         dict['date'] = date
         arr.append(dict)
     return arr
-    
-yesterday = datetime.now() - timedelta(1)  # 어제 날짜
-yyday = datetime.now() - timedelta(3)  # 3일전 날짜
-today = datetime.now()  # 오늘 날짜
+
+now = datetime.now()
+time = int(str(now.time())[:2])
+
+if time in range(15,24):
+    day1 = now
+    day2 = now - timedelta(2)
+else:
+    day1 = now - timedelta(1)  # 어제 날짜
+    day2 = now - timedelta(3)  # 3일전 날짜
 
 # url 입력
 url = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustWeekFrcstDspth?serviceKey=9EVeUgs2qfDAndxMrmsipei8IlVyfYJLrYhjRHc1P3O1vpnEcS%2BX7CJByyCd81%2FdfwKZ1efWvF1WSaDwYG6ApA%3D%3D&returnType=json&numOfRows=100&pageNo=1&searchDate='
-frcst1 = url + str(yesterday.date())
-frcst2 = url + str(yyday.date())
+frcst1 = url + str(day1.date())
+frcst2 = url + str(day2.date())
 
 # API를 통해 데이터를 긁어오기
 # 5회 에러 발생 시 파일 종료
